@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data & outputs
+data/activations/
+data/patcheval/*.json
+outputs/
+
+# Track SVEN raw data (small JSONL files)
+!data/raw/sven_train/
+!data/raw/sven_val/
+
+# Probe artifacts (large)
+models/probes/**/*.joblib
+!models/probes/**/*.json
+
+# Model weights and large files
+*.pt
+*.bin
+*.safetensors
+*.gguf
+*.h5
+
+# Secrets
+.env
+.env.*
+
+# Claude
+.claude/
+
+# LaTeX build artifacts
+writing/paper/*.aux
+writing/paper/*.log
+writing/paper/*.out
+writing/paper/*.toc
+writing/paper/*.bbl
+writing/paper/*.blg
+writing/paper/*.fls
+writing/paper/*.fdb_latexmk
+writing/paper/*.synctex.gz

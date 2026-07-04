@@ -1,0 +1,93 @@
+[project]
+name = "agentic-sec-probe"
+version = "0.1.0"
+description = "Probe-based security monitor for agentic code generation"
+readme = {text = "", content-type = "text/plain"}
+requires-python = ">=3.11"
+dependencies = [
+    "nnsight",
+    "transformer-lens",
+    "scikit-learn",
+    "statsmodels",  # McNemar paired test (extract_results.py)
+    "torch>=2.6,<2.7",
+    "transformers>=5.0",
+    "datasets",
+    "jupyter",
+    "ipykernel",
+    "ipywidgets",
+    "tqdm",
+    "matplotlib",
+    "seaborn",
+    "pandas",
+    "bitsandbytes",
+    "python-dotenv",
+    "ruff",
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "umap-learn>=0.5.11",
+    "papermill>=2.7.0",
+    "joblib>=1.5.3",
+    "mistral-common>=1.11.0",
+    "scipy-stubs>=1.17.1.3",
+]
+
+# NOTE on vLLM: it is intentionally NOT a project dependency or extra. vLLM 0.10+ pins
+# torch>=2.7 + transformers<4.56, which is UNSATISFIABLE against this project's
+# torch>=2.6,<2.7 + transformers>=5.0 (verified: `uv sync` fails to resolve with a vllm
+# extra present, even though sync wouldn't install it). The CoT vLLM run therefore uses a
+# SEPARATE, standalone venv on the box (scripts/setup_vllm_venv.sh): just vllm +
+# python-dotenv, with the repo's pure-Python helpers on PYTHONPATH. See plan decision D4.
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentic_sec_probe"]
+
+[[tool.uv.index]]
+url = "https://download.pytorch.org/whl/cu124"
+name = "pytorch-cu124"
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu124" }
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM", "TCH"]
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.ipynb" = ["N803", "N806", "E741", "B905"]
+"scripts/**/*.py" = ["N803", "N806", "B905", "E402"]
+"src/**/*.py" = ["N803", "N806"]
+"tests/**/*.py" = ["N803", "N806"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["agentic_sec_probe"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "nnsight.*",
+    "transformer_lens.*",
+    "sklearn.*",
+    "matplotlib.*",
+    "seaborn.*",
+    "pandas.*",
+    "datasets.*",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
