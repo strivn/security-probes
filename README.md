@@ -10,6 +10,32 @@ trains probes on residual-stream activations over paired vulnerable/fixed code,
 compares them against forced YES/NO prompting and Semgrep-class static analysis,
 and evaluates out-of-distribution transfer to real-world Python CVEs.
 
+## Paper
+
+**Activation Probes Surface Code-Security Signals that the Model's Output Misses**
+
+<!-- Add a link to the paper (arXiv / OpenReview PDF) here once it is public. -->
+
+AI coding agents write a growing share of production code, but human security
+review does not scale at the rate code is generated. The agents in widest use
+are closed-weight, so a deploying team cannot read their internals. It can
+instead run an open-weight model as a *reviewer* over the agent's output, whose
+activations are readable. This work asks whether reading those activations
+recovers a security signal that simply *asking* the same reviewer misses.
+
+We fit a single linear probe per model on paired vulnerable/fixed Python
+functions, then test it without retraining on real disclosed CVEs whose weakness
+type the probe never saw in training, across five open-weight reviewer models.
+On vulnerabilities fixed by a single-function change, the probe scores the
+vulnerable function above its fix in 61–67% of cases for every model, beating
+both the 50% chance line and the same model's prompted YES/NO win-rate under
+every prompt tried. Asking the model for a written verdict, even with
+chain-of-thought, returns the same answer on the vulnerable and fixed function
+most of the time and cannot tell them apart.
+
+**Takeaway:** model activations carry a code-security signal that prompting the
+same model misses.
+
 ## Layout
 
 ```
